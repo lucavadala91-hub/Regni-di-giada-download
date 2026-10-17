@@ -6,6 +6,11 @@ con il codice tramite [Three.js](https://threejs.org/). Non contiene risorse, no
 
 ## Come avviarlo
 
+**Il modo più semplice:** scarica `gioco.html` e aprilo con un doppio clic (Chrome, Edge o Firefox).
+È il gioco completo in un solo file; serve solo la connessione a Internet.
+
+Per sviluppare, usa invece la versione divisa in moduli:
+
 Il gioco usa i moduli ES, quindi va servito da un server web (aprire il file direttamente con `file://` non funziona):
 
 ```bash
@@ -46,3 +51,4 @@ Serve una connessione a Internet per scaricare Three.js dalla CDN.
 - `src/models.js`: modelli 3D di personaggi, mostri e Pietre dello Spirito
 - `src/data.js`: classi, abilità, mostri, oggetti, missioni
 - `src/main.js`: ciclo di gioco, combattimento, IA, interfaccia
+- `gioco.html`: versione in un solo file, generata con `python3 tools/build_single.py gioco.html`
