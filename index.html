@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NaviClone ERP</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <button id="navToggle" class="nav-toggle" aria-label="Menu">☰</button>
+    <a class="brand" href="#/">NaviClone <span>ERP</span></a>
+    <div class="company" id="companyName"></div>
+    <div class="tellme">
+      <input id="tellme" type="search" placeholder="Dimmi cosa vuoi fare… (Ctrl+K)" autocomplete="off">
+      <ul id="tellmeResults" hidden></ul>
+    </div>
+    <div class="workdate" id="workDate"></div>
+  </header>
+  <div class="shell">
+    <nav id="navpane"></nav>
+    <main id="main"></main>
+  </div>
+  <div id="toast"></div>
+  <div id="print"></div>
+
+  <script src="js/db.js"></script>
+  <script src="js/tables.js"></script>
+  <script src="js/posting.js"></script>
+  <script src="js/seed.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
