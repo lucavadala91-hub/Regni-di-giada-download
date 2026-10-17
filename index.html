@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>Regni di Giada</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Noto+Serif:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="game"></div>
+  <div id="labels"></div>
+  <div id="hurtflash"></div>
+
+  <div id="loading"><div class="logo">Regni di Giada</div><div>Generazione del mondo…</div></div>
+
+  <!-- Schermata di creazione del personaggio -->
+  <div id="start">
+    <div class="startbox panel">
+      <h1 class="logo">Regni di Giada</h1>
+      <div class="subtitle">Tre regni. Una sola leggenda.</div>
+      <h3>Scegli il tuo regno</h3>
+      <div id="kingdoms" class="choices"></div>
+      <h3>Scegli la tua classe</h3>
+      <div id="classes" class="choices"></div>
+      <div class="namerow">
+        <input id="pname-input" maxlength="16" placeholder="Nome del personaggio" />
+        <button id="enter" class="big">Entra nel mondo</button>
+      </div>
+      <button id="continue" class="hidden"></button>
+    </div>
+  </div>
+
+  <!-- HUD -->
+  <div id="hud" class="hidden">
+    <div id="charframe" class="panel">
+      <div id="portrait" class="portrait"></div>
+      <div class="info">
+        <div id="pname"></div>
+        <div id="plevel"></div>
+        <div class="bar hp"><div id="hpfill"></div><span id="hptext"></span></div>
+        <div class="bar mp"><div id="mpfill"></div><span id="mptext"></span></div>
+        <div id="buffs"></div>
+      </div>
+      <button id="statpts" class="hidden" data-win="win-char" title="Punti da assegnare">+</button>
+    </div>
+
+    <div id="targetframe" class="panel hidden">
+      <div id="tname"></div>
+      <div id="thpwrap" class="bar thp"><div id="thpfill"></div><span id="thptext"></span></div>
+    </div>
+
+    <div id="notice"></div>
+
+    <div id="minimapwrap">
+      <canvas id="minimap" width="170" height="170"></canvas>
+      <div id="zonename"></div>
+      <div id="coords"></div>
+    </div>
+
+    <div id="questtracker" class="panel"></div>
+
+    <div id="chat" class="panel"><div id="chatlog"></div></div>
+
+    <div id="bottombar" class="panel">
+      <div id="xpbar"><div id="xpfill"></div><div class="ticks"><i></i><i></i><i></i></div><span id="xptext"></span></div>
+      <div class="barrow">
+        <div id="slots"></div>
+        <div id="menubtns">
+          <button data-win="win-inv" title="Inventario (I)">🎒</button>
+          <button data-win="win-char" title="Personaggio (C)">👤</button>
+          <button data-win="win-help" title="Aiuto (H)">❔</button>
+        </div>
+      </div>
+      <div id="gold"></div>
+    </div>
+  </div>
+
+  <!-- Finestre -->
+  <div id="win-inv" class="window panel hidden">
+    <div class="wtitle">Inventario <button class="close">✕</button></div>
+    <div id="equip"></div>
+    <div id="invgrid"></div>
+    <div id="invgold" class="goldline"></div>
+  </div>
+
+  <div id="win-char" class="window panel hidden">
+    <div class="wtitle">Personaggio <button class="close">✕</button></div>
+    <div id="charstats"></div>
+    <div id="charpoints"></div>
+  </div>
+
+  <div id="win-dialog" class="window panel hidden">
+    <div class="wtitle"><span id="dtitle"></span> <button class="close">✕</button></div>
+    <div id="dbody"></div>
+    <div id="dbuttons"></div>
+  </div>
+
+  <div id="win-help" class="window panel hidden">
+    <div class="wtitle">Comandi <button class="close">✕</button></div>
+    <div class="help">
+      <div class="row"><span>Clic sinistro sul terreno</span><b>Muoviti</b></div>
+      <div class="row"><span>Clic sinistro su un mostro</span><b>Attacca</b></div>
+      <div class="row"><span>Clic su un personaggio</span><b>Parla</b></div>
+      <div class="row"><span>W A S D / frecce</span><b>Muoviti</b></div>
+      <div class="row"><span>Tasto destro + trascina, Q / E</span><b>Ruota la visuale</b></div>
+      <div class="row"><span>Rotellina</span><b>Zoom</b></div>
+      <div class="row"><span>Spazio / Tab</span><b>Attacca il nemico vicino</b></div>
+      <div class="row"><span>1 2 3 4</span><b>Abilità</b></div>
+      <div class="row"><span>5 / 6</span><b>Pozione rossa / blu</b></div>
+      <div class="row"><span>I · C · H · Esc</span><b>Inventario · Personaggio · Aiuto · Chiudi</b></div>
+      <p>Esci dalle mura e combatti. Distruggi le <b>Pietre dello Spirito</b> per molta esperienza e Frammenti di Giada, poi porta i frammenti al <b>Fabbro</b> per potenziare l'arma fino a +9.</p>
+    </div>
+  </div>
+
+  <div id="death" class="hidden">
+    <div class="panel deathbox">
+      <h2>Sei stato sconfitto</h2>
+      <button id="respawn" class="big">Rinasci al villaggio</button>
+    </div>
+  </div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
